@@ -2,7 +2,7 @@ import os
 import random
 import logging
 from dotenv import load_dotenv
-from files_parser import get_data
+from files_parser import get_questions
 from log_handler import MyLogsHandler
 import telegram_dialog 
 import vk_dialog
@@ -17,7 +17,7 @@ def main():
   logger.info('Бот проверки ошибок викторины запущен')
 
   load_dotenv()
-  questions  = get_data('questions')
+  questions  = get_questions('questions')
   try:
     telebot = telegram_dialog.MyTelegram_bot(questions)
     telebot.telegram_bot()
