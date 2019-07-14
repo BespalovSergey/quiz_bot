@@ -1,27 +1,35 @@
 import os
 
-def get_data(file_folder):
+def get_questions(file_folder):
   file_list = os.listdir(file_folder)
-  questions = {}
-  answers = {}
+  questions = []
+  
+  
 
   for name in file_list:
     with open('{}/{}'.format(file_folder,name) ,'r',encoding = 'KOI8-R') as my_file:
       file_content = my_file.read()
-      file_content = file_content.split('\n\n\n')
+      lines = file_content.split('\n\n\n')
 
-      for  i,content in enumerate( file_content):
+      for  i,content in enumerate(lines):
         if content[:7] != 'Вопрос' :
-         file_content[i] = file_content[i][file_content[i].find('Вопрос '):]
-
-      for item in file_content[:-1]:
+         lines[i] = content.replace('Вопрос ','')
+      
+      for item in lines[:-1]:
         item = item.split('\nОтвет')
-
+        
         if(len(item)<2):
           continue
-          
-        question =   item[0][item[0].find('\n')+1:].strip()
-        answer = item[1][item[1].find('\n'):item[1].find('\n\n')].strip()
-        questions[question] =  answer
         
+        question_to_strip = item[0] 
+        answer_to_strip = item[1]
+        question_line_to_strip = question_to_strip.find('\n')+1
+        answer_line_to_strip_first = answer_to_strip.find('\n')
+        answer_line_to_strip_second = answer_to_strip.find('\n\n')
+        
+        question =   question_to_strip[question_line_to_strip:].strip()
+        answer = answer_to_strip[answer_line_to_strip_first:answer_line_to_strip_second].strip()
+        questions.append((question, answer))
+           
+       
   return questions
