@@ -2,7 +2,7 @@ from telegram.ext import Updater ,CommandHandler, MessageHandler, Filters , Conv
 from telegram import ReplyKeyboardMarkup
 import os
 import random
-from files_parser import get_data
+from files_parser import get_questions
 import redis
 
 
@@ -14,9 +14,11 @@ class MyTelegram_bot():
 
   def __init__(self ,questions  ):
     self.questions = questions
-    self.keys = list(questions.keys())
+    
     self.r = redis.Redis(host = os.environ['redis_adress'] ,
-    password = os.environ['redis_password'], port = os.environ['redis_port']  ,decode_responses=True, db = 0
+     password = os.environ['redis_password'],
+     port = os.environ['redis_port'],
+     decode_responses=True, db = 0
     )
 
     
@@ -26,19 +28,24 @@ class MyTelegram_bot():
 
   def get_question_index(self , chat_id):
     index = -1
-    redis_data = self.r.get(chat_id)
+    redis_key = 'tg_{}'.format(chat_id)
+    redis_data = self.r.get(redis_key)
+
     if redis_data:
-      index = self.keys.index(redis_data)
-    return index 
+      index = redis_data
+    return int(index )
 
 
   def  handle_new_question_request(self,bot ,update):
     index = self.get_question_index(update.message.chat_id)
+    redis_key = 'tg_{}'.format(update.message.chat_id)
     try :
-      self.r.set(update.message.chat_id , self.keys[index +1])
-      result =  self.keys[index+1]
+      self.r.set(redis_key , index+1)
+      result =  self.questions[index+1][0]
     except IndexError:
-      result = self.keys[0]   
+      self.r.set(redis_key , 0)
+      result = self.questions[0][0]   
+
     update.message.reply_text(result , reply_markup = self.get_keyboard())  
 
 
@@ -49,8 +56,9 @@ class MyTelegram_bot():
     if index > -1:
 
       text = text.lower()  
-      right_answer = self.questions[self.keys[index]].lower()
+      right_answer = self.questions[index][1].lower()
       flag = ''
+
       if '(' in right_answer:
         right_answer = right_answer[0:right_answer.find('(')]
       elif '.' in  right_answer:
@@ -69,15 +77,17 @@ class MyTelegram_bot():
   def handle_surrend(self, bot, update):
     result = ''
     index = self.get_question_index(update.message.chat_id)
+
     if index == -1:
       result ='Рано сдаётесь , вопрос ещё не задан !'
-    result = self.questions[self.keys[index]]
+
+    result = self.questions[index][1]
     update.message.reply_text(result, reply_markup = self.get_keyboard())
     self.handle_new_question_request(bot ,update)
 
 
-  def my_score(self, bot ,update):
-    result = 'Статистика не ведётс'
+  def get_my_score(self, bot ,update):
+    result = 'Статистика не ведётся'
     update.message.reply_text(result, reply_markup = self.get_keyboard())
 
     
@@ -95,7 +105,7 @@ class MyTelegram_bot():
       entry_points = [CommandHandler('start', self.start),
                       RegexHandler('Новый вопрос' , self.handle_new_question_request),
                       RegexHandler('Сдаться' , self.handle_surrend),
-                      RegexHandler('Мой счёт' , self.my_score),
+                      RegexHandler('Мой счёт' , self.get_my_score),
                       MessageHandler(Filters.text,self. handle_solution_attempt)
                       
                       
