@@ -11,9 +11,9 @@ class MyVkBot():
   def __init__(self, questions):
     self.questions = questions
    
-    self.r = redis.Redis(host= os.environ['redis_adress'],
-              password = os.environ['redis_password'],
-              port = os.environ['redis_port'],
+    self.r = redis.Redis(host= os.environ['QUIZ_REDIS_ADDRESS'],
+              password = os.environ['QUIZ_REDIS_PASSWORD'],
+              port = os.environ['QUIZ_REDIS_PORT'],
               decode_responses = True, db = 0)
 
 
@@ -95,8 +95,8 @@ class MyVkBot():
                     keyboard = keyboard)
 
 
-  def vk_bot(self):
-    vk_session = vk_api.VkApi(token = os.environ['vk_token'])
+  def run_vk_bot(self):
+    vk_session = vk_api.VkApi(token = os.environ['QUIZ_VK_TOKEN'])
     vk_ap = vk_session.get_api()
     longpoll = VkLongPoll(vk_session)
 
