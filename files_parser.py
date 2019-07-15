@@ -11,9 +11,9 @@ def get_questions(file_folder):
       file_content = my_file.read()
       lines = file_content.split('\n\n\n')
 
-      for  i,content in enumerate(lines):
-        if content[:7] != 'Вопрос' :
-         lines[i] = content.replace('Вопрос ','')
+      for  i,line in enumerate(lines):
+        if line[:7] != 'Вопрос' :
+         lines[i] = line.replace('Вопрос ','')
       
       for item in lines[:-1]:
         item = item.split('\nОтвет')
