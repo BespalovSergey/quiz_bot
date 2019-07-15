@@ -15,9 +15,9 @@ class MyTelegram_bot():
   def __init__(self ,questions  ):
     self.questions = questions
     
-    self.r = redis.Redis(host = os.environ['redis_adress'] ,
-     password = os.environ['redis_password'],
-     port = os.environ['redis_port'],
+    self.r = redis.Redis(host = os.environ['QUIZ_REDIS_ADDRESS'] ,
+     password = os.environ['QUIZ_REDIS_PASSWORD'],
+     port = os.environ['QUIZ_REDIS_PORT'],
      decode_responses=True, db = 0
     )
 
@@ -96,9 +96,9 @@ class MyTelegram_bot():
     text = 'Здравствуйте , я  бот викторины' ,reply_markup = self.get_keyboard())
 
   
-  def telegram_bot(self):
+  def run_telegram_bot(self):
   
-    updater = Updater(os.environ['bot_quiz_telegram_token'])
+    updater = Updater(os.environ['QUIZ_TELEGRAMM_TOKEN'])
     dispatcher = updater.dispatcher
 
     conv_handler = ConversationHandler(
@@ -117,5 +117,3 @@ class MyTelegram_bot():
 
     dispatcher.add_handler(conv_handler)
     updater.start_polling()   
-
-
