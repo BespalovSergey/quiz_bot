@@ -11,13 +11,13 @@
     
 2 в корне создать файл ".env " с следующим содержанием
 
-    bot_error_token = 'Телеграм токен бота на который приходят ошибки'
-    bot_quiz_telegram_token = 'Телеграм токен бота викторины'
-    telegram_chat_id = ' Ваш id чата' (его можно узнать обратившись с командой /start к телеграм боту с именем userinfobot)
-    redis_password= 'Пароль к базе данных на Redislab'
-    redis_adress = 'Адресс базы данных на Redislab'
-    redis_port = 'Порт базы данных на Redislab'
-    vk_token = 'Токен группы вконтакте ' 
+    QUIZ_BOT_ERROR_TOKEN = 'Телеграм токен бота на который приходят ошибки'
+    QUIZ_TELEGRAMM_TOKEN = 'Телеграм токен бота викторины'
+    QUIZ_TELEGRAMM_CHAT_ID = ' Ваш id чата' (его можно узнать обратившись с командой /start к телеграм боту с именем    userinfobot)
+    QUIZ_REDIS_PASSWORD= 'Пароль к базе данных на Redislab'
+    QUIZ_REDIS_ADDRESS = 'Адресс базы данных на Redislab'
+    QUIZ_REDIS_PORT = 'Порт базы данных на Redislab'
+    QUIZ_VK_TOKEN = 'Токен группы вконтакте ' 
     
 3 Запустить файл main.py набрав в консоли команду
 
