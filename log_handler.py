@@ -6,7 +6,7 @@ import os
 class MyLogsHandler(logging.Handler):
     def __init__(self,my_chat_id):
         super().__init__()
-        self.error_bot = telegram.Bot(token= os.environ['bot_error_token'])
+        self.error_bot = telegram.Bot(token= os.environ['QUIZ_BOT_ERROR_TOKEN'])
         self.my_chat_id = my_chat_id
 
     def emit(self, record):
